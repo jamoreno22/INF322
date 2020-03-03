@@ -25,8 +25,8 @@ import { customCss } from './style';
 import { getAllCursos } from '../actions/cursos';
 import { ListaCursos } from '../reducers/cursos';
 
-import { getAllUsuarios } from '../actions/usuarios';
-import { ListaUsuarios} from '../reducers/usuarios';
+import { unsetUsuario } from '../actions/usuarios';
+import { Usuario } from '../reducers/usuarios';
 
 // These are the actions needed by this element.
 import {
@@ -43,6 +43,7 @@ import './snack-bar.js';
 
 // Aqui se importan los componentes.
 import './horario-clases';
+import './log-in';
 
 @customElement('main-page')
 export class MainPage extends connect(store)(LitElement) {
@@ -50,22 +51,12 @@ export class MainPage extends connect(store)(LitElement) {
   private _cursos: ListaCursos = {};
 
   @property({type: Object})
-  private _usuarios: ListaUsuarios = {};
-
-  @property({type: Boolean})
-  private _loggedIn: boolean = false;
+  private _usuario: Usuario | null = null;
 
   @property({type: String})
   private _page: string = '';
 
-  @property({type: String})
-  private _emailUsuario ='';
-
-  @property({type: String})
-  private _passwordUsuario= '';
-
   private appTitle : string = 'Siga';
-
   
   static get styles() {
     return [customCss,
@@ -114,7 +105,7 @@ export class MainPage extends connect(store)(LitElement) {
         #logInButton:hover {
           background: aqua;
         }
-        
+
         #footer {
         grid-column: 1 / 3;
         background-color: #faba25;
@@ -128,7 +119,7 @@ export class MainPage extends connect(store)(LitElement) {
           justify-content: center;
           height: 100%;
         }
-        
+
         .component-margin {
           margin: 10% 10%
         }
@@ -137,28 +128,8 @@ export class MainPage extends connect(store)(LitElement) {
     ];
   }
 
-
-
-  updateEmailUsuario(e:any) {
-    this._emailUsuario = e.target.value;
-  }
-  updatePasswordUsuario(e:any) {
-    this._passwordUsuario = e.target.value;
-  }
-
-  _logOut (){
-    this._loggedIn = false;
-    this._emailUsuario = '';
-    this._passwordUsuario = '';
-  }
-
-  _logIn () {
-
-    for (var i=0;i < Object.entries(this._usuarios).length; i++){
-      if (Object.values(this._usuarios)[i].email === this._emailUsuario && Object.values(this._usuarios)[i].password === this._passwordUsuario){
-        this._loggedIn = true;
-      }
-    }
+  _logOut () {
+    store.dispatch(unsetUsuario());
   }
 
   /* Render se ejecuta cada vez que se modifica una variable marcada como property, OJO: no se verifican las
@@ -167,10 +138,10 @@ export class MainPage extends connect(store)(LitElement) {
   protected render() {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
-    ${this._loggedIn ? html`
+    ${this._usuario ? html`
     <div id="main">
         <div id="header" style="vertical-align: middle;">
-            Sesión de ${this._emailUsuario}
+            Sesión de ${this._usuario.email}
             <button style="align: right;" @click="${this._logOut} class="button button-block"/>Log Out</button>
 
         </div>
@@ -199,29 +170,14 @@ export class MainPage extends connect(store)(LitElement) {
            
         <div id="content">
           <h1>Bienvenido!</h1>
+          <log-in></log-in>
+        </div>
 
-          <div class="field-wrap">
-          <label>
-            Correo<span class="req">*</span>
-          </label>
-          <input id=“email” @change=${(e:any) => this.updateEmailUsuario(e)} name="email" type="email"required autocomplete="on"/>
-          </div> 
-          
-          <div class="field-wrap">
-            <label>
-              Contraseña<span class="req">*</span>
-            </label>
-            <input id="password" @change=${(e:any) => this.updatePasswordUsuario(e)} type="password"required autocomplete="off"/>
-          </div>
-          
-          <button @click="${this._logIn} class="button button-block"/>Log In</button>
-        </div>       
         
         <div id="footer">
         <a>Universidad Técnica Federico Santa María
         <a>Contacto: +56 32 2654000 · dgc@usm.cl
         <a>Dirección: Avenida España 1680, Valparaíso 
-
 
         </div>
         
@@ -246,7 +202,6 @@ export class MainPage extends connect(store)(LitElement) {
 
     // Cargando datos
     store.dispatch(getAllCursos());
-    store.dispatch(getAllUsuarios());
   }
 
   /* Esta función se ejecuta DESPUES de cada render. */
@@ -270,6 +225,6 @@ export class MainPage extends connect(store)(LitElement) {
   stateChanged(state: RootState) {
     this._page = state.app!.page;
     this._cursos = state.cursos!.cursos;
-    this._usuarios = state.usuarios!.usuarios;
+    this._usuario = state.usuarios!.usuario;
   }
 }

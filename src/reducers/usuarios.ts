@@ -13,18 +13,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 import { Reducer } from 'redux';
 import {
-  GET_USUARIOS
+  GET_USUARIOS, SET_USUARIO, UNSET_USUARIO
 } from '../actions/usuarios.js';
 import { RootAction } from '../store.js';
 
 export interface UsuariosState {
   usuarios: ListaUsuarios;
+  usuario: Usuario | null;
 }
 
 export interface ListaUsuarios {
   [index:string]: Usuario;
 }
-
 
 export interface Usuario {
   email: string;
@@ -33,6 +33,7 @@ export interface Usuario {
 
 const INITIAL_STATE: UsuariosState = {
   usuarios: {},
+  usuario: null,
 };
 
 const usuarios: Reducer<UsuariosState, RootAction> = (state = INITIAL_STATE, action) => {
@@ -42,6 +43,16 @@ const usuarios: Reducer<UsuariosState, RootAction> = (state = INITIAL_STATE, act
         ...state,
         usuarios: action.usuarios
       };
+    case SET_USUARIO:
+      return {
+        ...state,
+        usuario: action.usuario
+      }
+    case UNSET_USUARIO:
+      return {
+        ...state,
+        usuario: null
+      }
     default:
       return state;
   }
