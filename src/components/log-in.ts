@@ -52,6 +52,11 @@ export class LogIn extends connect(store)(LitElement) {
         .component-margin {
           margin: 10% 10%
         }
+
+        #footer {
+          position: fixed;
+          bottom: 0;
+        }
         
       `
     ];
@@ -87,7 +92,7 @@ export class LogIn extends connect(store)(LitElement) {
             <input id="password" @change=${(e:any) => this.updatePasswordUsuario(e)} type="password"required autocomplete="off"/>
           </div>
           
-          <button @click="${this._logIn} class="button button-block"/>Log In</button>
+          <button @click="${this._logIn} class="LogInButton"/>Log In</button>
         </div>       
     `;
   }
