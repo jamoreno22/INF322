@@ -78,7 +78,6 @@ export class MainPage extends connect(store)(LitElement) {
           background-color: #0d1e52;
           text-align: left;
           color: white;
-          padding: 2%;
           grid-row: 1;
           grid-column: 1 / 3;
         }
@@ -146,7 +145,20 @@ export class MainPage extends connect(store)(LitElement) {
         .component-margin {
           margin: 10% 10%
         }
+
+        .row {
+          display: flex;
+          
+        }
         
+        .column {
+          flex: 50%;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          margin-right: 10px;
+          margin-left: 10px;
+        }
+        .c {margin-left: auto;}
       `
     ];
   }
@@ -163,10 +175,16 @@ export class MainPage extends connect(store)(LitElement) {
     return html`
     ${this._usuario ? html`
     <div id="main">
-        <div id="header" style="vertical-align: middle;">
-            Sesión de ${this._usuario.email}
+        <div class="row" id="header" style=" align-items: flex-start;">
+          <div class="column" style="flex: 15%;"> 
+          <img src="../images/logousm-en-blanco.png" alt="escudoUSM" height="60px">
+          </div>
+          <div class="column c" style="flex: 75%">
+            <h2>Bienvenido ${this._usuario.email}</h2>
+            </div>
+            <div class="column" style="flex: 10%;">             
             <button style="align: right;" @click="${this._logOut} class="button button-block"/>Log Out</button>
-
+          </div>
         </div>
            
         <div id="content">
@@ -176,19 +194,27 @@ export class MainPage extends connect(store)(LitElement) {
         </div>
         
         
-        <div id="footer">
-        <ul class="footer-links">
-          <li><a>Universidad Técnica Federico Santa María</a></li>
-          <li><a>Contacto: +56 32 2654000 · dgc@usm.cl</a></li>
-          <li><a>Dirección: Avenida España 1680, Valparaíso </a></li>
-        </ul>
+        <div class="row" id="footer">
+          <div class="column">
+            <ul class="footer-links">
+              <li><a>Universidad Técnica Federico Santa María</a></li>
+              <li><a>Contacto: +56 32 2654000 · dgc@usm.cl</a></li>
+              <li><a>Dirección: Avenida España 1680, Valparaíso </a></li>
+            </ul>
+          </div>
+
+          <div class="column" style="flex:25%">
+          </div>
+          <div class="column" style="flex:25%">
+            <img src="../images/logo_siga.jpg" alt="SIGA" height="70px" >
+          </div>
         </div>
         
     </div>
     ` : html` 
     <div id="main">
         <div id="header" style="vertical-align: middle;">
-          <img src="../images/escudo.png" alt="escudoUSM" height="70px">
+          <img src="../images/escudo.png" alt="escudoUSM" height="70px" >
         </div>
                       
         <div id="content">
@@ -199,12 +225,19 @@ export class MainPage extends connect(store)(LitElement) {
         </div>
 
         
-        <div id="footer">
-        <ul class="footer-links">
-          <li><a>Universidad Técnica Federico Santa María</a></li>
-          <li><a>Contacto: +56 32 2654000 · dgc@usm.cl</a></li>
-          <li><a>Dirección: Avenida España 1680, Valparaíso </a></li>
-        </ul>
+        <div class="row" id="footer">
+          <div class="column">
+            <ul class="footer-links">
+              <li><a>Universidad Técnica Federico Santa María</a></li>
+              <li><a>Contacto: +56 32 2654000 · dgc@usm.cl</a></li>
+              <li><a>Dirección: Avenida España 1680, Valparaíso </a></li>
+            </ul>
+          </div>
+          <div class="column" style="flex:25%">
+          </div>
+          <div class="column" style="flex:25%">
+            <img src="../images/logo_siga.jpg" alt="SIGA" height="70px" >
+          </div>
         </div>
         
     </div>
